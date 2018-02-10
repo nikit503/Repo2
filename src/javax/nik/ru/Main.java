@@ -13,9 +13,12 @@ import javax.xml.transform.*;
 
 
 import java.io.FileNotFoundException;
+import java.util.Calendar;
+
 
 
 import static javax.nik.ru.Utils.*;
+import static javax.nik.ru.Utils.getDate;
 
 public class Main {
 
@@ -25,14 +28,51 @@ public class Main {
         DocumentBuilder builder=factory.newDocumentBuilder();
         Document document=builder.newDocument();
 
-        Element root=document.createElement("root");
-        Element font=document.createElement("font");
+
+        String date1,date2;
+        date1=formateData(getDate());
+        date2=formateData(addDeltaMinutes(getDate(),15));
+
+        String pathDir="/usr/tmp/";
+        String dirFolder="/usr/dirName/";
+        Element root=document.createElement("main");
+
+        Element coord=document.createElement("Coordinator");
+        Element time=document.createElement("time");
+        Element path=document.createElement("path");
+        Element dir=document.createElement("Dir");
+
         Text text=document.createTextNode("Text example!");
 
         document.appendChild(root);
-        root.appendChild(font);
-        font.appendChild(text);
-        font.setAttribute("size","20");
+
+        root.appendChild(coord);
+        root.appendChild(coord);
+
+        coord.appendChild(time);
+        coord.appendChild(path);
+        coord.appendChild(dir);
+
+        for(int i=0;i<2;i++) {
+            coord.setAttribute("id", String.valueOf(i));
+            time.setTextContent(date1);
+            path.setTextContent(pathDir);
+            dir.setTextContent(dirFolder);
+        }
+
+
+        System.out.println(date1);
+        System.out.println(date2);
+
+
+
+
+
+
+
+
+
+
 
         writeToFile(document,"output.xml");
     }

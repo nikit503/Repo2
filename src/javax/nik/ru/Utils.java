@@ -10,6 +10,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 class Utils {
 
@@ -21,5 +24,20 @@ class Utils {
         Transformer transformer= TransformerFactory.newInstance().newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT,"yes");
         transformer.transform(new DOMSource(document),new StreamResult(new FileOutputStream(fileName)));
+    }
+
+    static Calendar getDate(){
+        Date date= new Date();
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
+    }
+    static Calendar addDeltaMinutes(Calendar calendar,int minCount){
+        calendar.add(Calendar.MINUTE,minCount);
+        return calendar;
+    }
+    static String formateData(Calendar calendar){
+        SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return dateFormat.format(calendar.getTime());
     }
 }
