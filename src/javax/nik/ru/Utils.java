@@ -8,6 +8,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -39,5 +40,16 @@ class Utils {
     static String formateData(Calendar calendar){
         SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return dateFormat.format(calendar.getTime());
+    }
+
+    static void createDir(String dirName){
+        File dir=new File(dirName);
+        if(!dir.exists())
+          dir.mkdirs();
+    }
+
+    static void deleteDir(File dirName){
+        if(dirName.exists())
+            dirName.delete();
     }
 }
