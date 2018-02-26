@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 
 
 import static javax.nik.ru.Utils.*;
@@ -33,6 +34,10 @@ public class Main {
 
         List<String> tagsList=Arrays.asList("main", "coord", "time","path","Dir");
         List<String> listTypes=Arrays.asList("obj1", "obj2", "obj3","obj4","obj5");
+
+
+
+
 
 
         String date1;
