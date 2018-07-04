@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://C:/Program Files/JetBrains/apache-tomee-plume-7.0.4/lib/servlet-api.jar!/" />
+      <root url="jar://C:/Program Files/JetBrains/apache-tomee-plume-7.0.4/lib/jsp-api.jar!/" />
+      <root url="file://C:/Program Files/JetBrains/apache-tomee-plume-7.0.4/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/Program Files/JetBrains/apache-tomee-plume-7.0.4/lib" />
+    </SOURCES>
+    <jarDirectory url="file://C:/Program Files/JetBrains/apache-tomee-plume-7.0.4/lib" recursive="false" />
+    <jarDirectory url="file://C:/Program Files/JetBrains/apache-tomee-plume-7.0.4/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>
