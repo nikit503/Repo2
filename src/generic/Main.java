@@ -13,11 +13,11 @@ public class Main {
 //        GenBin<Integer> integerGenBin = new GenBin<>();
 //        integerGenBin.setVar(123);
 
-        GenBin<DbLoader> genBin = new GenBin<>();
+        GenBin<Functor> genBin = new GenBin<>();
 
         genBin.setVar(new DbLoader());
         genBin.load();
-        genBin.upd();
+
 //        GenBin[] genBins = new GenBin[2];
 //
 //        genBins[0] = stringGenBin;
@@ -61,7 +61,7 @@ class Updater extends Functor {
         System.out.println("Data updated!");
     }
 }
-class GenBin<Y extends DbLoader> {
+class GenBin<Y extends Functor> {
     private Y var;
 
     public Y getVar() {
@@ -83,9 +83,7 @@ class GenBin<Y extends DbLoader> {
         var.loadData();
     }
 
-    void upd(){
-        var.updateDb();
-    }
+
 
 }
 
