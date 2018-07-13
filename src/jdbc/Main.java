@@ -26,10 +26,13 @@ public class Main {
 //            System.out.println("Успех, соединение установлено!");
 
             statement.executeUpdate("DROP TABLE DATA");
+
             statement.executeUpdate("CREATE TABLE Data(ID INTEGER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), name CHAR(30) NOT NULL)");
             statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Maxon')");
-            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Maxon2')");
-            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Maxon3')");
+            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Vacyan')");
+            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Толик')");
+            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Женек')");
+            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Колян')");
 
             ResultSet resultSet = statement.executeQuery("SELECT * FROM DATA");
             while (resultSet.next()){
@@ -37,6 +40,7 @@ public class Main {
                 System.out.println(resultSet.getString("NAME"));
                 System.out.println("*************");
             }
+
         } catch (SQLException e) {
 //            System.out.println("Ошибка соединения с БД!");
             e.printStackTrace();
