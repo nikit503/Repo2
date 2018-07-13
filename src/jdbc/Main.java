@@ -1,8 +1,6 @@
 package jdbc;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Main {
 
@@ -23,21 +21,27 @@ public class Main {
         }
 
         System.out.println("Драйвер ОК!");
-        Connection connection;
-        try {
-            connection = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@Nikitos_PC:1521:orcl", "oracul", "qwe123");
+        try (Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@Nikitos_PC:1521:orcl", "oracul", "qwe123");
+             Statement statement = connection.createStatement()) {
+//            System.out.println("Успех, соединение установлено!");
 
+            statement.executeUpdate("DROP TABLE DATA");
+            statement.executeUpdate("CREATE TABLE Data(ID INTEGER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1), name CHAR(30) NOT NULL)");
+            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Maxon')");
+            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Maxon2')");
+            statement.executeUpdate("INSERT INTO DATA (NAME) VALUES ('Maxon3')");
+
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM DATA");
+            while (resultSet.next()){
+                System.out.println(resultSet.getInt("ID"));
+                System.out.println(resultSet.getString("NAME"));
+                System.out.println("*************");
+            }
         } catch (SQLException e) {
-            System.out.println("Ошибка соединения с БД!");
+//            System.out.println("Ошибка соединения с БД!");
             e.printStackTrace();
-            return;
         }
-        if (connection != null) {
-            System.out.println("Успех, соединение установлено!");
-        } else {
-            System.out.println("Ошибка соединения");
-        }
+
     }
 
 }
