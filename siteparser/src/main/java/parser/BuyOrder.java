@@ -27,7 +27,7 @@ public class BuyOrder {
 
     private LocalDate updateDate;
 
-    public BuyOrder(Element element) {
+    BuyOrder(Element element) {
         Element descriptTenderTd = element.getElementsByClass("descriptTenderTd").get(0);
         Element tenderId = element.getElementsByClass("tenderTd").get(0);
 
@@ -49,7 +49,7 @@ public class BuyOrder {
         customerName = customer.text();
         customerUrl = customer.attr("href");
         description = descriptTenderTd.getElementsByTag("dd").get(1).text();
-        buyId = descriptTenderTd.getElementsByTag("dd").get(2).text().replaceAll("\\D+", "");
+        buyId = descriptTenderTd.getElementsContainingOwnText("Идентификационный код закупки(ИКЗ):").text().replaceAll("\\D+", "");
 
         pattern = Pattern.compile("Размещено: (?<startDate>[\\d.]+) Обновлено: (?<updateDate>[^<]+)");
         matcher = pattern.matcher(element.getElementsByClass("amountTenderTd").text());

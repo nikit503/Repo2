@@ -8,8 +8,10 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,10 +26,10 @@ public class Main {
 
 //            System.out.println(elements.first().getElementsByClass("tenderTd"));
 
-            for (Element element : elements) {
+            List<BuyOrder> buyOrderList = new ArrayList<>();
 
-                BuyOrder order = new BuyOrder(element);
-                System.out.println(order.toString());
+            for (Element element : elements) {
+                buyOrderList.add(new BuyOrder(element));
                 /*
                 System.out.println(element);
 //                System.out.println(element.getElementsByClass("tenderTd"));
@@ -93,9 +95,10 @@ public class Main {
 
                 System.out.println("Размещено: "+startDate);
                 System.out.println("Обновлено: "+updateDate);*/
-                break;
             }
 
+            System.out.println(buyOrderList.size());
+            System.out.println(buyOrderList.get(2).toString());
 
         } catch (IOException e) {
             e.printStackTrace();
