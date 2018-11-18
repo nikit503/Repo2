@@ -16,6 +16,7 @@ public class BuyOrder {
     private Double startPrice;
     private String currency;
 
+    private String failMsg;
     private String reasonLaw;
     private String stage;
 
@@ -30,8 +31,25 @@ public class BuyOrder {
     BuyOrder(Element element) {
         Element descriptTenderTd = element.getElementsByClass("descriptTenderTd").get(0);
         Element tenderId = element.getElementsByClass("tenderTd").get(0);
+        String tmp[];
+        if (tenderId.getElementsByTag("dt").get(0).hasClass("colorRed")) {
+            failMsg = tenderId.getElementsByTag("dt").get(0).text();
+            tenderStatus = tenderId.getElementsByTag("dt").get(1).text();
+            tmp = tenderId.getElementsByTag("dt").get(2).text().split("/");
+        } else {
+            failMsg = "";
+            tenderStatus = tenderId.getElementsByTag("dt").get(0).text();
+            tmp = tenderId.getElementsByTag("dt").get(1).text().split("/");
+        }
+        regNumber = descriptTenderTd.getElementsByTag("dt").get(0).text().replaceAll("\\D+", "");
+        if (tmp.length == 2) {
+            stage = tmp[0].trim();
+            reasonLaw = tmp[1].trim();
+        } else {
+            System.out.println("Ошибка парсинга заявки: " + regNumber);
+            failMsg = "parseError";
+        }
 
-        tenderStatus = tenderId.getElementsByTag("dt").get(0).text();
         Pattern pattern = Pattern.compile("Начальная цена (?<price>[\\d, ]+) (?<currency>[^<]+)");
         Matcher matcher = pattern.matcher(tenderId.getElementsByTag("dd").text());
         while (matcher.find()) {
@@ -39,18 +57,12 @@ public class BuyOrder {
             currency = matcher.group("currency").trim();
         }
 
-        String tmp[] = tenderId.getElementsByTag("dt").get(1).text().split("/");
-        stage = tmp[0].trim();
-        reasonLaw = tmp[1].trim();
-
-        regNumber = descriptTenderTd.getElementsByTag("dt").get(0).text().replaceAll("\\D+", "");
 
         Elements customer = descriptTenderTd.getElementsByClass("nameOrganization").get(0).getElementsByAttributeStarting("href");
         customerName = customer.text();
         customerUrl = customer.attr("href");
         description = descriptTenderTd.getElementsByTag("dd").get(1).text();
         buyId = descriptTenderTd.getElementsContainingOwnText("Идентификационный код закупки(ИКЗ):").text().replaceAll("\\D+", "");
-
         pattern = Pattern.compile("Размещено: (?<startDate>[\\d.]+) Обновлено: (?<updateDate>[^<]+)");
         matcher = pattern.matcher(element.getElementsByClass("amountTenderTd").text());
         DateTimeFormatter f = DateTimeFormatter.ofPattern("dd.MM.uuuu");
@@ -108,6 +120,10 @@ public class BuyOrder {
         return updateDate;
     }
 
+    public String getFaillMsg() {
+        return failMsg;
+    }
+
     @Override
     public String toString() {
         return "BuyOrder{" +
@@ -123,6 +139,7 @@ public class BuyOrder {
                 ", buyId='" + buyId + '\'' +
                 ", startDate=" + startDate +
                 ", updateDate=" + updateDate +
+                ", failMsg=" + failMsg +
                 '}';
     }
 }

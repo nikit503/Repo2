@@ -16,93 +16,56 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
+
+    private static int TOTAL_PAGES = 50;
+    private static int RECORDS_PER_PAGE = 100;
+
     public static void main(String[] args) {
         System.out.println("qwe123");
         try {
-            Document doc = Jsoup.connect("http://zakupki.gov.ru/epz/order/quicksearch/search.html").get();
-            Elements elements = doc.getElementsByClass("registerBox registerBoxBank margBtm20");
-            Pattern pattern;
-            Matcher matcher;
+            List<BuyOrder> buyOrderList = new ArrayList<>(TOTAL_PAGES * RECORDS_PER_PAGE);
 
-//            System.out.println(elements.first().getElementsByClass("tenderTd"));
+            long startTime = System.currentTimeMillis();
+            for (int page = 1; page < TOTAL_PAGES; page++) {
 
-            List<BuyOrder> buyOrderList = new ArrayList<>();
+                Document doc = Jsoup.connect(getUrl(page)).get();
+                Elements elements = doc.getElementsByClass("registerBox registerBoxBank margBtm20");
 
-            for (Element element : elements) {
-                buyOrderList.add(new BuyOrder(element));
-                /*
-                System.out.println(element);
-//                System.out.println(element.getElementsByClass("tenderTd"));
-                Elements tenderId = element.getElementsByClass("tenderTd");
-                Elements descriptTenderTd = element.getElementsByClass("descriptTenderTd");
-                Elements amountTenderTd = element.getElementsByClass("amountTenderTd");
-
-                for (Element element1 : tenderId) {
-//                    System.out.println(element1);
-
-                    String tenderStatus = element1.getElementsByTag("dt").get(0).text();
-                    String tmp[] = element1.getElementsByTag("dt").get(1).text().split("/");
-
-                    String startPriceBlock = element1.getElementsByTag("dd").text();
-                    pattern = Pattern.compile("Начальная цена (?<price>[\\d, ]+) (?<currency>[^<]+)");
-                    matcher = pattern.matcher(startPriceBlock);
-
-                    Double startPrice = null;
-                    String currency = null;
-
-                    while (matcher.find()) {
-                        startPrice = Double.parseDouble(matcher.group("price").replace(" ", "").replace(",", "."));
-                        currency = matcher.group("currency").trim();
+                for (Element element : elements) {
+                    BuyOrder order = new BuyOrder(element);
+                    if (!order.getFaillMsg().equals("parseError")) {
+                        buyOrderList.add(order);
                     }
-
-
-//                    System.out.println("Статус: " + tenderStatus);
-//                    System.out.println("Закупка по: " + tmp[1]);
-//                    System.out.println("Этап закупки: " + tmp[0]);
-//                    System.out.println("Стартовая цена: " + startPrice);
-//                    System.out.println("Валюта: " + currency);
                 }
-
-                for (Element element1 : descriptTenderTd) {
-//                    System.out.println(Arrays.toString(element1.wholeText().replace("  ","").split("\n")));
-//                    System.out.println(element1);
-                    String regNumber = element1.getElementsByTag("dt").get(0).text().replaceAll("\\D+", "");
-//
-
-                    Elements customer = element1.getElementsByClass("nameOrganization").get(0).getElementsByAttributeStarting("href");
-                    String customerName = customer.text();
-                    String customerUrl = customer.attr("href");
-                    String description = element1.getElementsByTag("dd").get(1).text();
-                    String ikz = element1.getElementsByTag("dd").get(2).text().replaceAll("\\D+", "");
-
-                    System.out.println("№: " + regNumber);
-                    System.out.println("Заказчик: " + customerName);
-                    System.out.println("URL заказчика: " + customerUrl);
-                    System.out.println("Описание: " + description);
-                    System.out.println("ИКЗ: " + ikz);
-                }
-                pattern= Pattern.compile("Размещено: (?<startDate>[\\d.]+) Обновлено: (?<updateDate>[^<]+)");
-                matcher = pattern.matcher(amountTenderTd.text());
-                LocalDate startDate = null;
-                LocalDate updateDate = null;
-
-                DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd/MM/uuuu" );
-
-                while (matcher.find()) {
-                    startDate = LocalDate.parse(matcher.group("startDate"));
-                    updateDate = LocalDate.parse(matcher.group("updateDate"));
-                }
-
-                System.out.println("Размещено: "+startDate);
-                System.out.println("Обновлено: "+updateDate);*/
             }
+            long endTime = System.currentTimeMillis();
 
             System.out.println(buyOrderList.size());
-            System.out.println(buyOrderList.get(2).toString());
-
+            System.out.println(buyOrderList.get(0).toString());
+            System.out.println(endTime - startTime);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private static String getUrl(int pageNum) {
+        String buildUrl = "http://zakupki.gov.ru/epz/order/quicksearch/search.html?" + "morphology=on" +
+                "&pageNumber=" + pageNum +
+                "&sortDirection=false" +
+                "&recordsPerPage=_" + RECORDS_PER_PAGE +
+                "&showLotsInfoHidden=false" +
+                "&fz44=on" +
+                "&fz223=on" +
+                "&ppRf615=on" +
+                "&fz94=on" +
+                "&af=on" +
+                "&ca=on" +
+                "&pc=on" +
+                "&pa=on" +
+                "&currencyId=-1" +
+                "&regionDeleted=false" +
+                "&sortBy=UPDATE_DATE";
+        return buildUrl;
     }
 }
